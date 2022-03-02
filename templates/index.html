@@ -7,18 +7,32 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-  <!-- STEP 2: THE D3 MODULE -->
   <script src="{{url_for('static', filename='js/d3.min.js')}}"></script>
 
+  <script src="{{url_for('static', filename='js/d3graphscript.js')}}"></script>
 
 
 </head>
 
 <body>
-  <script src="{{url_for('static', filename='js/d3graphscript.js')}}"></script>
-  
-      <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+  <script>   d3.json('/get-json')
+    .then(function (data) {
 
+     chart= ForceGraph(data, {
+        nodeId: d => d.id,
+        nodeGroup: d => d.group,
+        nodeTitle: d => `${d.id}\n${d.group}`,
+        linkStrokeWidth: l => Math.sqrt(l.value),
+        width: 600,
+        height: 600,
+        // invalidation: false // a promise to stop the simulation when the cell is re-run
+      });
+      document.body.appendChild(chart);
+
+
+    });</script>
+
+<div id="chart"></div>
 </body>
 
 </html>
